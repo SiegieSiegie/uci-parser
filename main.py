@@ -40,7 +40,7 @@ def get_table_markdown(url: str, max_players: int = 25, with_tb: bool = False):
         cells = row.find_elements(By.CSS_SELECTOR, 'td')[:5]
         if len(cells) > 0:
             actions.move_to_element(cells[4]).perform()
-            tiebreak_popover = WebDriverWait(driver=driver, timeout=5).until(
+            tiebreak_popover = wait.until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, '.cc-tooltip-component'))
             )
             actions.reset_actions()
