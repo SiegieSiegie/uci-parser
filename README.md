@@ -1,7 +1,5 @@
 # UCI Parser
 
-## Description
-
 Scrape and parse Chess.com or other websites using this UCI (Universal Chess Info) parser
 
 ## Installation
