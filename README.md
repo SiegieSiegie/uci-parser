@@ -15,13 +15,9 @@ pip install -r requirements.txt
 
 ## Usage
 
-**Write:**
-
 ```
 python main.py --url **URL** --tb --max **number**
 ```
-
-**Wait for the ready-to-use table!**
 
 ### Arguments
 
