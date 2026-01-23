@@ -1,6 +1,6 @@
 # UCI Parser
 
-Scrape and parse Chess.com or other websites using this UCI (Universal Chess Info) parser
+Scrape Chess.com and generate markdown tables using this UCI (Universal Chess Info) parser
 
 ## Installation
 
