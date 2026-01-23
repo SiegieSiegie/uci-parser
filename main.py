@@ -1,3 +1,4 @@
+import json
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -9,14 +10,27 @@ import countryflag
 import sys
 
 
-def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False):
-    markdown_table = '| Place | Player               | Score |\n' \
-    '| ----- | --------------------- | ----- |\n'
-    markdown_table_with_tiebreak = '| Place | Player               | Score | TB    |\n' \
-    '| ----- | --------------------- | ----- | ----- |\n'
+def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False, tournament_name: str = None):
+    markdown_table = '| Place | Player               | Score |'
+    markdown_table_divider = '| ----- | -------------------- | ----- |'
+    prizes = None
 
     if with_tb:
-        markdown_table = markdown_table_with_tiebreak
+        markdown_table += ' TB    |'
+        markdown_table_divider += ' ----- |'
+
+    if tournament_name:
+        markdown_table += ' Prize |'
+        markdown_table_divider += ' ----- |'
+
+        with open('prizes.json', 'r') as file:
+            prizes = json.load(file)
+
+        prizes = prizes[tournament_name]
+
+    markdown_table += '\n'
+    markdown_table_divider += '\n'
+    markdown_table += markdown_table_divider
 
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
@@ -36,6 +50,7 @@ def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False):
 
     table = driver.find_element(By.CSS_SELECTOR, table_classes)
     rows = table.find_elements(By.CSS_SELECTOR, 'tbody tr')
+    tiebreak_points = None
     for row in rows[:max_players]:
         cells = row.find_elements(By.CSS_SELECTOR, 'td')[:5]
         if len(cells) > 0:
@@ -56,8 +71,21 @@ def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False):
 
             player_title_name = cells[1].find_elements(By.CSS_SELECTOR, 'span')
 
-            markdown_table_row = f'| {cells[0].text}. | {country_emoji} {player_title_name[0].text.strip()} {player_title_name[1].text} | {cells[4].text} {f'| {tiebreak_points} |' if with_tb else '|'}\n'
+            fr = {
+                'place': f'{cells[0].text}.',
+                'emoji': country_emoji,
+                'title': player_title_name[0].text.strip(),
+                'player': f'{country_emoji} {player_title_name[0].text.strip()} {player_title_name[1].text}',
+                'score': cells[4].text,
+                'tb': tiebreak_points,
+                'prize': prizes.get(cells[0].text) if prizes.get(cells[0].text) else '-'
+            }
+
+            markdown_table_row = f'| {fr["place"]} | {fr["player"]} | {fr['score']} |{f' {fr['tb']} |' if with_tb else ''}{f' {fr['prize']} |' if (tournament_name) else ''}\n'
             markdown_table += markdown_table_row
+
+            # markdown_table_row = f'| {cells[0].text}. | {country_emoji} {player_title_name[0].text.strip()} {player_title_name[1].text} | {cells[4].text} {f'| {tiebreak_points} |' if with_tb else '|'}\n'
+            # markdown_table += markdown_table_row
 
     driver.quit()
     return markdown_table
@@ -65,15 +93,18 @@ def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False):
 
 if __name__ == '__main__':
     args = sys.argv[1:]
+    max_players = 26
+    tournament_name = None
+    with_tb = '--tb' in args
 
     if not ('--url' in args):
-        print('You forgot "--url **URL**"!')
-    else:
-        url = args[args.index('--url') + 1]
-        if '--max' in args:
-            max_players = int(args[args.index('--max') + 1]) + 1
-        else:
-            max_players = 26
-        with_tb = '--tb' in args
+        raise AttributeError
+    
+    url = args[args.index('--url') + 1]
+    if '--max' in args:
+        max_players = int(args[args.index('--max') + 1]) + 1
 
-        print(get_table_markdown(url=url, with_tb=with_tb, max_players=max_players))
+    if '--prizes' in args:
+        tournament_name = args[args.index('--prizes') + 1].upper()
+
+    print(get_table_markdown(url=url, with_tb=with_tb, max_players=max_players, tournament_name=tournament_name))
