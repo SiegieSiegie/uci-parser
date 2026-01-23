@@ -12,7 +12,7 @@ import sys
 def get_table_markdown(url: str, max_players: int = 25, with_tb: bool = False):
     markdown_table = '| Place | Player               | Score |\n' \
     '| ----- | --------------------- | ----- |\n'
-    markdown_table_with_tiebreak = '| Place | Player               | TB    | Score |\n' \
+    markdown_table_with_tiebreak = '| Place | Player               | Score | TB    |\n' \
     '| ----- | --------------------- | ----- | ----- |\n'
 
     if with_tb:
@@ -56,7 +56,7 @@ def get_table_markdown(url: str, max_players: int = 25, with_tb: bool = False):
 
             player_title_name = cells[1].find_elements(By.CSS_SELECTOR, 'span')
 
-            markdown_table_row = f'| {cells[0].text}. | {country_emoji} {player_title_name[0].text.strip()} {player_title_name[1].text} {f'| {tiebreak_points} |' if with_tb else ' |'} {cells[4].text} |\n'
+            markdown_table_row = f'| {cells[0].text}. | {country_emoji} {player_title_name[0].text.strip()} {player_title_name[1].text} | {cells[4].text}{f'| {tiebreak_points} |' if with_tb else ' |'}\n'
             markdown_table += markdown_table_row
 
     driver.quit()
