@@ -9,7 +9,7 @@ import countryflag
 import sys
 
 
-def get_table_markdown(url: str, max_players: int = 25, with_tb: bool = False):
+def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False):
     markdown_table = '| Place | Player               | Score |\n' \
     '| ----- | --------------------- | ----- |\n'
     markdown_table_with_tiebreak = '| Place | Player               | Score | TB    |\n' \
@@ -70,7 +70,10 @@ if __name__ == '__main__':
         print('You forgot "--url **URL**"!')
     else:
         url = args[args.index('--url') + 1]
-        max_players = int(args[args.index('--max') + 1]) + 1
+        if '--max' in args:
+            max_players = int(args[args.index('--max') + 1]) + 1
+        else:
+            max_players = 26
         with_tb = '--tb' in args
 
         print(get_table_markdown(url=url, with_tb=with_tb, max_players=max_players))
