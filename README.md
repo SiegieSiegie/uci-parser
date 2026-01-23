@@ -8,9 +8,10 @@ Scrape and parse Chess.com or other websites using this UCI (Universal Chess Inf
 
 ```
 git clone https://github.com/SiegieSiegie/uci-parser
+cd uci-parser
 python -m venv .venv
-cd /.venv/Scripts
-/Activate.ps1
+cd .venv/Scripts
+activate.bat
 cd..
 cd..
 pip install -r requirements.txt
