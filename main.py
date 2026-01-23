@@ -56,7 +56,7 @@ def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False):
 
             player_title_name = cells[1].find_elements(By.CSS_SELECTOR, 'span')
 
-            markdown_table_row = f'| {cells[0].text}. | {country_emoji} {player_title_name[0].text.strip()} {player_title_name[1].text} | {cells[4].text}{f'| {tiebreak_points} |' if with_tb else ' |'}\n'
+            markdown_table_row = f'| {cells[0].text}. | {country_emoji} {player_title_name[0].text.strip()} {player_title_name[1].text} | {cells[4].text} {f'| {tiebreak_points} |' if with_tb else '|'}\n'
             markdown_table += markdown_table_row
 
     driver.quit()
