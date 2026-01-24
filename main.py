@@ -13,7 +13,7 @@ import sys
 def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False, tournament_name: str = None):
     markdown_table = '| Place | Player               | Score |'
     markdown_table_divider = '| ----- | -------------------- | ----- |'
-    prizes = None
+    prizes = {}
 
     if with_tb:
         markdown_table += ' TB    |'
@@ -45,20 +45,20 @@ def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False, t
     wait = WebDriverWait(driver=driver, timeout=120)
     wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, table_classes)))
     wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.country-flags-component')))
-    time.sleep(3)
+    # time.sleep(3)
     actions = ActionChains(driver=driver)
 
     table = driver.find_element(By.CSS_SELECTOR, table_classes)
     rows = table.find_elements(By.CSS_SELECTOR, 'tbody tr')
     tiebreak_points = None
+
     for row in rows[:max_players]:
         cells = row.find_elements(By.CSS_SELECTOR, 'td')[:5]
         if len(cells) > 0:
             actions.move_to_element(cells[4]).perform()
-            tiebreak_popover = wait.until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, '.cc-tooltip-component'))
-            )
+            tiebreak_popover = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.cc-tooltip-component')))
             actions.reset_actions()
+
             if tiebreak_popover:
                 tiebreak_points = tiebreak_popover.text.split()[1]
 
@@ -68,7 +68,6 @@ def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False, t
                 country_code = 'RU'
 
             country_emoji = countryflag.getflag(countries=country_code)
-
             player_title_name = cells[1].find_elements(By.CSS_SELECTOR, 'span')
 
             fr = {
