@@ -2,19 +2,22 @@
 title UCI Parser
 setlocal
 cd /d "%~dp0"
-echo ################################
-echo #          UCI Parser          #
-echo ################################
-echo.
 
 if exist ".venv\Scripts\activate.bat" (
     call .venv\Scripts\activate.bat
 ) else (
     echo Setting up for the first use...
+    echo.
     python -m venv .venv
     call .venv\Scripts\activate.bat
     pip install -r requirements.txt
 )
+
+echo.
+echo ############################################
+echo #                UCI Parser                #
+echo ############################################
+echo.
 
 :main_section
 set /p url="URL: "
