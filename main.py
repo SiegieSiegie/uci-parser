@@ -84,9 +84,6 @@ def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False, t
             markdown_table_row = f'| {fr["place"]} | {fr["player"]} | {fr['score']} |{f' {fr['tb']} |' if with_tb else ''}{f' {fr['prize']} |' if (tournament_name) else ''}\n'
             markdown_table += markdown_table_row
 
-            # markdown_table_row = f'| {cells[0].text}. | {country_emoji} {player_title_name[0].text.strip()} {player_title_name[1].text} | {cells[4].text} {f'| {tiebreak_points} |' if with_tb else '|'}\n'
-            # markdown_table += markdown_table_row
-
     driver.quit()
     return markdown_table
         
