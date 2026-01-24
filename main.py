@@ -11,9 +11,11 @@ import sys
 
 
 def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False, tournament_name: str = None):
+    prizes = {}
+    tiebreak_points = None
+
     markdown_table = '| Place | Player               | Score |'
     markdown_table_divider = '| ----- | -------------------- | ----- |'
-    prizes = {}
 
     if with_tb:
         markdown_table += ' TB    |'
@@ -42,15 +44,19 @@ def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False, t
 
     table_classes = '.crosstable-swiss-component, .crosstable-standard-component'
 
-    wait = WebDriverWait(driver=driver, timeout=120)
+    wait = WebDriverWait(driver=driver, timeout=30)
+    print('Waiting for Table to appear...')
     wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, table_classes)))
+    print('Waiting for Flags Components to appear...')
     wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.country-flags-component')))
-    # time.sleep(3)
+    print('Waiting for Table to fully load...')
+    time.sleep(5)
+    print('Waiting for parsing...\n')
+
     actions = ActionChains(driver=driver)
 
     table = driver.find_element(By.CSS_SELECTOR, table_classes)
     rows = table.find_elements(By.CSS_SELECTOR, 'tbody tr')
-    tiebreak_points = None
 
     for row in rows[:max_players]:
         cells = row.find_elements(By.CSS_SELECTOR, 'td')[:5]
