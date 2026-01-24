@@ -10,7 +10,7 @@ Scrape Chess.com and generate markdown tables using this UCI (Universal Chess In
 - Go to preferred location
 - Run git clone https://github.com/SiegieSiegie/uci-parser
 
-### If don't:
+### If you don't:
 
 - Download code ZIP
 - Unpack wherever
