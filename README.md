@@ -8,7 +8,7 @@ Scrape Chess.com and generate markdown tables using this UCI (Universal Chess In
 
 - Open CMD
 - `cd` to preferred directory
-- Run git clone https://github.com/SiegieSiegie/uci-parser
+- Run `git clone https://github.com/SiegieSiegie/uci-parser`
 
 ### If you don't:
 
