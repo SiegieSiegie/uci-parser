@@ -73,6 +73,11 @@ def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False, t
             except NoSuchElementException:
                 country_code = 'RU'
 
+            try:
+                score = cells[4].text.split()[2]
+            except IndexError:
+                score = cells[4].text
+
             country_emoji = countryflag.getflag(countries=country_code)
             player_title_name = cells[1].find_elements(By.CSS_SELECTOR, 'span')
 
@@ -81,7 +86,7 @@ def get_table_markdown(url: str, max_players: int = 26, with_tb: bool = False, t
                 'emoji': country_emoji,
                 'title': player_title_name[0].text.strip(),
                 'player': f'{country_emoji} {player_title_name[0].text.strip()} {player_title_name[1].text}',
-                'score': cells[4].text,
+                'score': score,
                 'tb': tiebreak_points,
                 'prize': prizes.get(cells[0].text) if prizes.get(cells[0].text) else '-'
             }
