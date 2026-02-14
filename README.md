@@ -17,7 +17,13 @@ Scrape Chess.com and generate markdown tables using this UCI (Universal Chess In
 
 ## Usage
 
+### Results Table Parsing
+
 Run `cli.bat` and follow instructions from the terminal
+
+### Image Preparation
+
+Run `convert.ps1` as a PowerShell script to convert images and follow instructions
 
 ## Tournament Names
 
