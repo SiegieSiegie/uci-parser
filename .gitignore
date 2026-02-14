@@ -9,3 +9,4 @@ venv/
 .venv/
 env.bak/
 venv.bak/
+key.txt
