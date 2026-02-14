@@ -1,2 +1,3 @@
 countryflag==1.1.1
 selenium==4.40.0
+tinify==1.7.1
